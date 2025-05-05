@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Gallery</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Car Gallery</h1>
+    </header>
+    <div class="container">
+        <div class="menu">
+            <select id="make" class="dropdown">
+                <option value="">Виберіть бренд</option>
+            </select>
+            <select id="brand" class="dropdown" disabled>
+                <option value="">Виберіть модель</option>
+            </select>
+            <select id="year" class="dropdown" disabled>
+                <option value="">Виберіть рік</option>
+            </select>
+        </div>
+        <div id="gallery" class="gallery"></div>
+        <div id="slider" class="slider">
+            <button id="prev" class="slider-btn">❮</button>
+            <div id="slider-container" class="slider-container">
+                <!-- Images will be dynamically added here -->
+            </div>
+            <button id="next" class="slider-btn">❯</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="close" class="close">&times;</span>
+            <img id="modal-img" src="" alt="">
+            <p id="modal-path"></p>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
