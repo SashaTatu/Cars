@@ -64,7 +64,8 @@ footer {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    padding: 20px;
+    padding: 10px; /* Зменшено відступи */
+    margin-top: 10px; /* Піднято галерею вище */
 }
 
 .gallery img {
@@ -167,24 +168,21 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 
 .slider-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Три колонки */
-    grid-template-rows: repeat(2, 1fr); /* Два рядки */
-    gap: 20px; /* Відступи між картинками */
-    justify-content: center;
-    align-items: center;
-    width: 90%; /* Ширина контейнера */
-    height: 90%; /* Висота контейнера */
-    margin: auto;
+    display: flex; /* Використовуємо flexbox для центрування */
+    justify-content: center; /* Центрування по горизонталі */
+    align-items: center; /* Центрування по вертикалі */
+    width: 100%; /* Ширина контейнера */
+    height: 100%; /* Висота контейнера */
     transition: transform 0.5s ease-in-out;
 }
 
 .slider-container img {
-    width: 100%;
-    height: 100%;
+    width: 60%;
+    height: 60%;
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.3s;
@@ -227,4 +225,18 @@ footer {
 #next {
     right: 20px; /* Зменшено відступ */
     top: calc(50% - 40px); /* Розташування між рядами */
+}
+
+.image-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: 20px;
+    color: #ff0000;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
 }

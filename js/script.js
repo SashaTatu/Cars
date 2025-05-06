@@ -4,6 +4,7 @@
 fetch('js/cars.json')
     .then(response => response.json())
     .then(data => {
+        console.log(data); // Перевірте, чи дані завантажуються правильно
         const makeDropdown = document.getElementById('make');
         const brandDropdown = document.getElementById('brand');
         const yearDropdown = document.getElementById('year');
@@ -44,7 +45,7 @@ fetch('js/cars.json')
             if (selectedMake && structuredData[selectedMake]) {
                 brandDropdown.disabled = false;
 
-                // Populate brand dropdown (sorted alphabetically)
+                // Populate brand dropdown
                 const brands = Object.keys(structuredData[selectedMake]).sort();
                 for (const brand of brands) {
                     const option = document.createElement('option');
@@ -96,41 +97,53 @@ fetch('js/cars.json')
                 const sliderContainer = document.getElementById('slider-container');
                 sliderContainer.innerHTML = ''; // Clear previous images
 
-                // Add only the first 6 images to the slider
-                images.slice(0, 6).forEach(({ path, src }) => {
+                let currentIndex = 0;
+
+                // Function to update the displayed image
+                const updateImage = () => {
+                    sliderContainer.innerHTML = ''; // Clear the container
                     const img = new Image();
-                    img.src = src;
-                    img.alt = `${path}`;
+                    img.src = images[currentIndex].src;
+                    img.alt = images[currentIndex].path;
+                    img.classList.add('slider-image');
+
+                    // Handle image load error
+                    img.onerror = () => {
+                        sliderContainer.innerHTML = ''; // Clear the container
+                        const errorDiv = document.createElement('div');
+                        errorDiv.textContent = 'Ой, фото не вдалося завантажити';
+                        errorDiv.classList.add('image-error');
+                        sliderContainer.appendChild(errorDiv);
+                    };
+
+                    // Check image dimensions after it loads
                     img.onload = () => {
-                        if (img.width > 1 && img.height > 1) {
+                        if (img.naturalWidth === 1 && img.naturalHeight === 1) {
+                            // Do not display images with dimensions 1x1
+                            sliderContainer.style.display='none' // Clear the container
+                        } else {
                             sliderContainer.appendChild(img);
                         }
                     };
-                    img.onerror = () => {
-                        console.warn(`Image not found or invalid: ${src}`);
-                    };
-                });
 
-                // Initialize slider functionality
-                let currentIndex = 0;
-                const imagesPerPage = 6;
-
-                const updateSlider = () => {
-                    const offset = -currentIndex * 100; // Переміщення на 100% для кожної сторінки
-                    sliderContainer.style.transform = `translateX(${offset}%)`;
+                    sliderContainer.appendChild(img);
                 };
 
+                // Initialize the first image
+                updateImage();
+
+                // Add event listeners for navigation buttons
                 document.getElementById('prev').addEventListener('click', () => {
                     if (currentIndex > 0) {
                         currentIndex--;
-                        updateSlider();
+                        updateImage();
                     }
                 });
 
                 document.getElementById('next').addEventListener('click', () => {
-                    if (currentIndex < Math.ceil(images.length / imagesPerPage) - 1) {
+                    if (currentIndex < images.length - 1) {
                         currentIndex++;
-                        updateSlider();
+                        updateImage();
                     }
                 });
             }
