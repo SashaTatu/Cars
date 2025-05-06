@@ -198,7 +198,7 @@ footer {
 
 .slider-btn {
     position: absolute;
-    top: 50%;
+    top: 50%; /* Розташування по вертикалі */
     transform: translateY(-50%);
     background-color: rgba(255, 255, 255, 0.5);
     color: black;
@@ -208,6 +208,11 @@ footer {
     padding: 15px;
     z-index: 1000;
     border-radius: 50%;
+    height: 60px; /* Висота кнопки */
+    width: 60px; /* Ширина кнопки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .slider-btn:hover {
@@ -215,9 +220,11 @@ footer {
 }
 
 #prev {
-    left: 20px;
+    left: 20px; /* Зменшено відступ */
+    top: calc(50% - 40px); /* Розташування між рядами */
 }
 
 #next {
-    right: 20px;
+    right: 20px; /* Зменшено відступ */
+    top: calc(50% - 40px); /* Розташування між рядами */
 }
