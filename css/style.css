@@ -164,6 +164,7 @@ footer {
     width: 100%; /* Ширина контейнера */
     height: 100%; /* Висота контейнера */
     transition: transform 0.5s ease-in-out;
+    gap: 20px; /* Відстань між зображеннями */
 }
 
 .slider-container img {

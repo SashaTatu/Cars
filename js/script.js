@@ -198,3 +198,5 @@ fetch('js/cars.json')
         });
     })
     .catch((error) => console.error('Error loading cars.json:', error));
+
+    
