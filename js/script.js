@@ -87,6 +87,16 @@ fetch('js/cars.json')
             const selectedBrand = brandDropdown.value;
             const selectedYear = yearDropdown.value;
 
+            // Remove focus from the dropdown
+            yearDropdown.blur();
+
+            const prevButton = document.getElementById('prev');
+            const nextButton = document.getElementById('next');
+
+            // Hide buttons by default
+            prevButton.style.display = 'none';
+            nextButton.style.display = 'none';
+
             if (
                 selectedMake &&
                 selectedBrand &&
@@ -97,53 +107,79 @@ fetch('js/cars.json')
                 const sliderContainer = document.getElementById('slider-container');
                 sliderContainer.innerHTML = ''; // Clear previous images
 
-                let currentIndex = 0;
+                // Add only valid images to the slider
+                images.forEach(({ path, src }) => {
+                    const img = new Image(); // Create a new Image object
+                    img.src = src;
 
-                // Function to update the displayed image
-                const updateImage = () => {
-                    sliderContainer.innerHTML = ''; // Clear the container
-                    const img = new Image();
-                    img.src = images[currentIndex].src;
-                    img.alt = images[currentIndex].path;
-                    img.classList.add('slider-image');
-
-                    // Handle image load error
-                    img.onerror = () => {
-                        sliderContainer.innerHTML = ''; // Clear the container
-                        const errorDiv = document.createElement('div');
-                        errorDiv.textContent = 'Ой, фото не вдалося завантажити';
-                        errorDiv.classList.add('image-error');
-                        sliderContainer.appendChild(errorDiv);
-                    };
-
-                    // Check image dimensions after it loads
+                    // Check if the image loads successfully
                     img.onload = () => {
-                        if (img.naturalWidth === 1 && img.naturalHeight === 1) {
-                            // Do not display images with dimensions 1x1
-                            sliderContainer.style.display='none' // Clear the container
-                        } else {
-                            sliderContainer.appendChild(img);
+                        if (img.naturalWidth > 1 && img.naturalHeight > 1) {
+                            const galleryImg = document.createElement('img');
+                            galleryImg.src = src;
+                            galleryImg.alt = `${path}`;
+                            galleryImg.classList.add('slider-image');
+
+                            // Add click event to open modal
+                            galleryImg.addEventListener('click', () => {
+                                modal.style.display = 'block';
+                                modalImg.src = src;
+                                modalCaption.textContent = `${path}`;
+                            });
+
+                            sliderContainer.appendChild(galleryImg);
                         }
                     };
 
-                    sliderContainer.appendChild(img);
+                    // Handle image load error
+                    img.onerror = () => {
+                        console.warn(`Image not found or invalid: ${src}`);
+                    };
+                });
+
+                // Show buttons if images are available
+                if (images.length > 0) {
+                    prevButton.style.display = 'flex';
+                    nextButton.style.display = 'flex';
+                }
+
+                // Initialize slider functionality
+                let currentIndex = 0;
+                const imagesPerPage = 6;
+
+                const updateSlider = () => {
+                    const offset = -currentIndex * 100; // Move slider by 100% for each page
+                    sliderContainer.style.transform = `translateX(${offset}%)`;
                 };
 
-                // Initialize the first image
-                updateImage();
-
-                // Add event listeners for navigation buttons
-                document.getElementById('prev').addEventListener('click', () => {
+                prevButton.addEventListener('click', () => {
                     if (currentIndex > 0) {
                         currentIndex--;
-                        updateImage();
+                        updateSlider();
                     }
                 });
 
-                document.getElementById('next').addEventListener('click', () => {
-                    if (currentIndex < images.length - 1) {
+                nextButton.addEventListener('click', () => {
+                    if (currentIndex < Math.ceil(images.length / imagesPerPage) - 1) {
                         currentIndex++;
-                        updateImage();
+                        updateSlider();
+                    }
+                });
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'ArrowLeft') {
+                        // Simulate "Prev" button click
+                        if (currentIndex > 0) {
+                            currentIndex--;
+                            updateSlider();
+                        }
+                    } else if (event.key === 'ArrowRight') {
+                        // Simulate "Next" button click
+                        if (currentIndex < Math.ceil(images.length / imagesPerPage) - 1) {
+                            currentIndex++;
+                            updateSlider();
+                        }
                     }
                 });
             }
