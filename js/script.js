@@ -82,7 +82,6 @@ fetch('js/cars.json')
 
         // Handle year selection
         yearDropdown.addEventListener('change', () => {
-            gallery.innerHTML = '';
             const selectedMake = makeDropdown.value;
             const selectedBrand = brandDropdown.value;
             const selectedYear = yearDropdown.value;
@@ -90,12 +89,8 @@ fetch('js/cars.json')
             // Remove focus from the dropdown
             yearDropdown.blur();
 
-            const prevButton = document.getElementById('prev');
-            const nextButton = document.getElementById('next');
-
-            // Hide buttons by default
-            prevButton.style.display = 'none';
-            nextButton.style.display = 'none';
+            const sliderContainer = document.getElementById('slider-container');
+            sliderContainer.innerHTML = ''; // Clear previous images
 
             if (
                 selectedMake &&
@@ -104,83 +99,54 @@ fetch('js/cars.json')
                 structuredData[selectedMake][selectedBrand][selectedYear]
             ) {
                 const images = structuredData[selectedMake][selectedBrand][selectedYear];
-                const sliderContainer = document.getElementById('slider-container');
-                sliderContainer.innerHTML = ''; // Clear previous images
+                let currentIndex = 0;
 
-                // Add only valid images to the slider
-                images.forEach(({ path, src }) => {
-                    const img = new Image(); // Create a new Image object
+                // Add images to the slider
+                images.forEach(({ path, src }, index) => {
+                    const img = new Image();
                     img.src = src;
+                    img.alt = `${path}`;
+                    img.classList.add('slider-image');
 
-                    // Check if the image loads successfully
+                    // Handle image load success
                     img.onload = () => {
-                        if (img.naturalWidth > 1 && img.naturalHeight > 1) {
-                            const galleryImg = document.createElement('img');
-                            galleryImg.src = src;
-                            galleryImg.alt = `${path}`;
-                            galleryImg.classList.add('slider-image');
-
-                            // Add click event to open modal
-                            galleryImg.addEventListener('click', () => {
-                                modal.style.display = 'block';
-                                modalImg.src = src;
-                                modalCaption.textContent = `${path}`;
-                            });
-
-                            sliderContainer.appendChild(galleryImg);
+                        if (index === currentIndex) img.classList.add('active', 'visible'); // Set the first image as active
+                        else if (index === currentIndex - 1 || index === currentIndex + 1) {
+                            img.classList.add('side', 'visible'); // Set side images
                         }
+                        sliderContainer.appendChild(img);
                     };
 
                     // Handle image load error
                     img.onerror = () => {
-                        console.warn(`Image not found or invalid: ${src}`);
+                        console.warn(`Image failed to load: ${src}`);
                     };
                 });
 
-                // Show buttons if images are available
-                if (images.length > 0) {
-                    prevButton.style.display = 'flex';
-                    nextButton.style.display = 'flex';
-                }
-
-                // Initialize slider functionality
-                let currentIndex = 0;
-                const imagesPerPage = 6;
-
                 const updateSlider = () => {
-                    const offset = -currentIndex * 100; // Move slider by 100% for each page
-                    sliderContainer.style.transform = `translateX(${offset}%)`;
+                    const allImages = sliderContainer.querySelectorAll('.slider-image');
+                    allImages.forEach((img, index) => {
+                        img.classList.remove('active', 'side', 'visible');
+                        if (index === currentIndex) {
+                            img.classList.add('active', 'visible');
+                        } else if (index === currentIndex - 1 || index === currentIndex + 1) {
+                            img.classList.add('side', 'visible');
+                        }
+                    });
                 };
 
+                // Add navigation buttons
+                const prevButton = document.getElementById('prev');
+                const nextButton = document.getElementById('next');
+
                 prevButton.addEventListener('click', () => {
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                        updateSlider();
-                    }
+                    currentIndex = (currentIndex - 1 + images.length) % images.length; // Move to the previous image
+                    updateSlider();
                 });
 
                 nextButton.addEventListener('click', () => {
-                    if (currentIndex < Math.ceil(images.length / imagesPerPage) - 1) {
-                        currentIndex++;
-                        updateSlider();
-                    }
-                });
-
-                // Add keyboard navigation
-                document.addEventListener('keydown', (event) => {
-                    if (event.key === 'ArrowLeft') {
-                        // Simulate "Prev" button click
-                        if (currentIndex > 0) {
-                            currentIndex--;
-                            updateSlider();
-                        }
-                    } else if (event.key === 'ArrowRight') {
-                        // Simulate "Next" button click
-                        if (currentIndex < Math.ceil(images.length / imagesPerPage) - 1) {
-                            currentIndex++;
-                            updateSlider();
-                        }
-                    }
+                    currentIndex = (currentIndex + 1) % images.length; // Move to the next image
+                    updateSlider();
                 });
             }
         });
@@ -199,4 +165,3 @@ fetch('js/cars.json')
     })
     .catch((error) => console.error('Error loading cars.json:', error));
 
-    
