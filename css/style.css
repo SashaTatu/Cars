@@ -152,16 +152,17 @@ footer {
     height: 100vh; /* Висота на весь екран */
     overflow: hidden;
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Вирівнюємо галерею ближче до верху */
     justify-content: center;
     background-color: #f4f4f4;
+    padding-top: 20px; /* Додаємо відступ зверху */
 }
 
 .slider-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px; /* Збільшено відстань між зображеннями */
+    gap: 40px; /* Відстань між зображеннями */
     transition: transform 0.5s ease-in-out;
     height: 80%; /* Висота контейнера */
     width: 90%; /* Ширина контейнера */
@@ -197,8 +198,8 @@ footer {
 
 .slider-btn {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 50%; /* Розташування кнопок по вертикалі на рівні галереї */
+    transform: translateY(-50%); /* Центрування кнопок по вертикалі */
     background-color: rgba(255, 255, 255, 0.5);
     color: black;
     border: none;
@@ -215,11 +216,11 @@ footer {
 }
 
 #prev {
-    left: 20px;
+    left: 10px; /* Відступ кнопки "Назад" від лівого краю */
 }
 
 #next {
-    right: 20px;
+    right: 10px; /* Відступ кнопки "Вперед" від правого краю */
 }
 
 .image-error {

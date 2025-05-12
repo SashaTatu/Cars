@@ -148,6 +148,19 @@ fetch('js/cars.json')
                     currentIndex = (currentIndex + 1) % images.length; // Move to the next image
                     updateSlider();
                 });
+
+                // Add keyboard navigation
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'ArrowLeft') {
+                        // Simulate "Prev" button click
+                        currentIndex = (currentIndex - 1 + images.length) % images.length;
+                        updateSlider();
+                    } else if (event.key === 'ArrowRight') {
+                        // Simulate "Next" button click
+                        currentIndex = (currentIndex + 1) % images.length;
+                        updateSlider();
+                    }
+                });
             }
         });
 
