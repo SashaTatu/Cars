@@ -1,5 +1,30 @@
 // This file contains the JavaScript code for the web application.
 
+const loader = document.getElementById('loader');
+const dots = document.getElementById('dots');
+
+let dotCount = 0;
+
+// Функція для оновлення крапок
+const animateDots = () => {
+    dotCount = (dotCount + 1) % 4;
+
+    // Зміна тексту і поява
+    setTimeout(() => {
+        dots.textContent = '.'.repeat(dotCount);
+        dots.style.opacity = 1;
+    }, 100); 
+};
+
+const dotsInterval = setInterval(animateDots, 70);
+
+// Приклад: Приховати завантажувач після завершення завантаження
+setTimeout(() => {
+    clearInterval(dotsInterval); // Зупиняємо анімацію
+    loader.classList.add('hidden'); // Приховуємо завантажувач
+}, 5000); // Приховати через 5 секунд
+
+
 // Fetch data from cars.json
 fetch('js/cars.json')
     .then(response => response.json())
@@ -175,6 +200,14 @@ fetch('js/cars.json')
                 modal.style.display = 'none';
             }
         });
+
+        // Приховати завантажувач після завантаження
+        loader.classList.add('hidden');
     })
-    .catch((error) => console.error('Error loading cars.json:', error));
+    .catch((error) => {
+        console.error('Error loading cars.json:', error);
+
+        // Приховати завантажувач навіть у разі помилки
+        loader.classList.add('hidden');
+    });
 
