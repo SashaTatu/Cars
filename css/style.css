@@ -162,7 +162,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 40px; /* Відстань між зображеннями */
+    gap: 60px; /* Відстань між зображеннями */
     transition: transform 0.5s ease-in-out;
     height: 80%; /* Висота контейнера */
     width: 90%; /* Ширина контейнера */
