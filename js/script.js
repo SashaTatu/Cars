@@ -16,7 +16,7 @@ const animateDots = () => {
     }, 100); 
 };
 
-const dotsInterval = setInterval(animateDots, 70);
+const dotsInterval = setInterval(animateDots, 100);
 
 // Приклад: Приховати завантажувач після завершення завантаження
 setTimeout(() => {
